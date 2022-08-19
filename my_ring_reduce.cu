@@ -84,6 +84,11 @@ cudaError_t ring_reduce(MyComm *comm)
     {
         reduce_step(comm, i);
     }
+    for(int i = 0; i < num_gpus; i++)
+    {
+        CUDACHECK(cudaSetDevice(i));
+        CUDACHECK(cudaStreamSynchronize(comm->add_stream[i]));
+    }
     return cudaSuccess;
 }
 
